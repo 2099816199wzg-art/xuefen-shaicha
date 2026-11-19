@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>商务英语学分梳理快速筛查</title>
+<style>
+:root{--bg:#f2f5f7;--card:#fff;--ink:#14212b;--mute:#5b6b78;--line:#d3dce3;--ok:#0b7a5a;--ow:#b45309;--ac:#1f5fa8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161c;--card:#18222b;--ink:#e6edf2;--mute:#93a3b0;--line:#2b3a46;--ok:#4cc9a0;--ow:#f0a64a;--ac:#6ea8ee}}
+:root[data-theme="dark"]{--bg:#0f161c;--card:#18222b;--ink:#e6edf2;--mute:#93a3b0;--line:#2b3a46;--ok:#4cc9a0;--ow:#f0a64a;--ac:#6ea8ee}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif}
+main{max-width:720px;margin:0 auto;padding:16px 14px 40px}
+h1{font-size:1.5rem;margin:8px 0 4px}
+p.s{margin:0 0 14px;color:var(--mute);font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.w{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mute);font-weight:600}
+tr.ow td:nth-child(4){color:var(--ow);font-weight:700}
+tr.ok td:nth-child(4){color:var(--ok)}
+tfoot td{font-weight:700;border-bottom:0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+button{font:inherit;min-height:40px;padding:0 14px;border-radius:8px;border:1px solid var(--ac);background:var(--ac);color:#fff;cursor:pointer}
+button.g{background:transparent;color:var(--ac)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+summary{cursor:pointer;padding:12px 14px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+summary span{font-weight:400;color:var(--mute)}
+.b{padding:0 14px 12px}
+label.c{display:flex;align-items:center;gap:10px;min-height:44px;border-top:1px solid var(--line)}
+label.c input{width:20px;height:20px;flex:none}
+label.c em{margin-left:auto;font-style:normal;color:var(--mute)}
+.n{width:84px;min-height:40px;font:inherit;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+ul{margin:6px 0 0;padding-left:20px}
+.nt{font-size:.88rem;color:var(--mute)}
+.nt li{margin-bottom:4px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{flex:1}
+.pk{position:relative;display:inline-block}.pk button{pointer-events:none;min-height:48px}.pk input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+#tx{width:100%;margin-top:10px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.pk{display:block}.pk button{display:none}.pk input{position:static;width:100%;height:auto;opacity:1;font-size:inherit;min-height:44px}</style></head><body><main>
+<h1>学分梳理快速筛查</h1>
+<p class="s">按 2023 级商务英语专业培养方案的学分标准计算，不按成绩单显示的学分。勾选你已经及格的课程，结果自动对应“学分梳理情况通知书”。军事训练默认已修，全员统一计入。</p>
+
+<div class="card"><div class="w"><table>
+<thead><tr><th>课程模块</th><th>应修</th><th>已取得</th><th>尚欠</th></tr></thead>
+<tbody id="rows"></tbody><tfoot id="tot"></tfoot></table></div>
+<div class="bar"><button id="cp">复制结果</button><button class="g" id="rs">重置</button></div>
+<div id="cm" class="nt" role="status"></div></div>
+
+<div class="card"><b>尚欠课程</b><ul id="ms"></ul></div>
+
+<div class="tabs"><button id="t1">自己勾选</button><button id="t2">导入成绩单</button></div>
+<div id="imp" class="card" hidden><b>导入成绩单</b>
+<p class="nt">上传成绩单 PDF（最准确），或拍照、截图（最多 4 张）。全部在你自己的浏览器里识别，不上传到任何服务器；首次识别要联网加载识别组件，照片识别较慢也可能出错，请核对结果，也可以切到“自己勾选”微调。</p>
+<div class="bar"><span class="pk"><button type="button" class="g">选择 PDF 或照片</button><input type="file" id="ph" accept="image/*,application/pdf" multiple></span><span class="pk"><button type="button" class="g">拍照</button><input type="file" id="ph2" accept="image/*" capture="environment"></span><button class="g" id="clr">清除</button></div>
+<div id="fl" class="nt"></div>
+<textarea id="tx" rows="4" placeholder="如果选不了照片，可以直接粘贴成绩单文字（从成绩单 PDF 复制）"></textarea>
+<div class="bar"><button id="go">识别并计算</button></div>
+<div id="im" class="nt" role="status"></div></div>
+<div id="mods"></div>
+
+<div class="card nt"><b>说明</b><ul>
+<li>集中实践环节应修 21 学分，不含第二课堂 3 学分。</li>
+<li>通识选修要求：满 8 学分，至少跨三个大类，必须含劳动教育和国家安全教育，非艺术类学生另修 2 学分艺术限定课。</li>
+<li>英语语法、综合商务英语1、基础英语写作、商务英语听力3、经济学导论、跨境电子商务实务不及格，不能补考，必须重修。</li>
+<li>专业任选课至少 20 学分，超出部分仍计入已取得学分。</li>
+<li>结果仅供自查，以学院和教务处最终审核为准。</li></ul></div>
+</main>
+<script>
+var M=[
+["通识类必修课",27,["思想道德修养与法律基础|3","中国近现代史纲要|3","马克思主义基本原理概论|3","毛泽东思想和中国特色社会主义理论体系概论|3","习近平新时代中国特色社会主义思想概论|3","形势与政策|2","大学计算机|3","体育与健康（1）|1","体育与健康（2）|1","体育与健康（3）|1","体育与健康（4）|1","军事理论|1","大学生心理健康教育|2"]],
+["通识类选修课",8,null],
+["学科基础课",43,["商务英语专业导论与创业基础|2","综合商务英语（1）|6","综合商务英语（2）|6","综合商务英语（3）|6","综合商务英语（4）|6","商务英语听力（1）|2","商务英语听力（2）|2","商务英语听力（3）|2","商务英语口语（1）|2","商务英语口语（2）|1","商务英语口语（3）|1","英语语音|2","英语语法|2","基础英语写作|3"]],
+["专业主干课",21,["经济学导论|3","国际营销导论（双语）|3","商务英语写作|3","外贸函电|3","跨文化商务交际导论|3","国际贸易实务（双语）|4","外贸单证实务|2"]],
+["专业限选课",17,["第二外语：大学日语（1）或大学法语（1）|4","英语国家概况|2","商务翻译|3","跨境电子商务实务|3","跨境电商客服管理|1","发制品跨境电商实务|1","发制品商贸英语|2","跨境电商美工实务|1"]],
+["专业任选课",20,["商务英语阅读（1）|2","商务英语阅读（2）|2","国际贸易理论|2","国际金融实务|2","管理学导论|2","国际商务礼仪|2","国际商法导论|2","高等数学C|3","线性代数B|2","英语阅读能力训练|2","英语公共演讲|2","第二外语（2）|4","第二外语（3）|4","英国文学作品选读|2","美国文学作品选读|2","英汉互译（1）|2","英汉互译（2）|2","中原特色文化翻译实践|2","中国文化通论|3","西方文化经典著作选读|3","英语学术文献写作|2","高级英语写作|2","高级英语（1）|4","高级英语（2）|4","批判性思维|2"]],
+["集中实践环节",21,["军事训练|1|1","工程实训|1","专业见习|1","外贸技能综合实训|1","跨境电子商务实训|1","英语口语实训|2","毕业实习|8","毕业论文/设计|6"]]
+];
+var FIX={0:1,2:1,3:1,6:1};
+function $(s){return document.querySelector(s)}
+var st={c:{},g:0};
+function def(){st={c:{},g:0};M.forEach(function(m,i){if(m[2])m[2].forEach(function(s,j){if(s.split("|")[2])st.c[i+"-"+j]=1})})}
+function load(){def();try{var t=JSON.parse(localStorage.getItem("xf-bz")||"null");if(t&&t.c)st=t}catch(e){}}
+function save(){try{localStorage.setItem("xf-bz",JSON.stringify(st))}catch(e){}}
+function build(){
+  var h="";
+  M.forEach(function(m,i){
+    h+='<details open><summary>'+m[0]+'<span id="h'+i+'"></span></summary><div class="b">';
+    if(!m[2]){h+='<label class="c">已修通识选修学分（0–20）<input class="n" type="number" min="0" max="20" step="0.5" id="g" value="'+st.g+'"></label>'}
+    else{
+      h+='<div class="bar"><button class="g" data-a="1" data-i="'+i+'">全选</button><button class="g" data-a="0" data-i="'+i+'">清空</button></div>';
+      m[2].forEach(function(s,j){var p=s.split("|"),k=i+"-"+j;
+        h+='<label class="c"><input type="checkbox" data-k="'+k+'"'+(st.c[k]?" checked":"")+'>'+p[0]+'<em>'+p[1]+' 学分</em></label>'});
+    }
+    h+='</div></details>';
+  });
+  $("#mods").innerHTML=h;
+}
+var out="";
+function calc(){
+  var rows="",tr=0,te=0,to=0,miss=[],txt="";
+  M.forEach(function(m,i){
+    var e=0;
+    if(!m[2])e=st.g;
+    else m[2].forEach(function(s,j){var p=s.split("|");if(st.c[i+"-"+j])e+=+p[1];else if(FIX[i]||i==6)miss.push(p[0]+"（"+m[0]+"，"+p[1]+" 学分）")});
+    var o=Math.max(0,m[1]-e);
+    if(!FIX[i]&&i!=6&&o>0)miss.push(m[0]+"还差 "+o+" 学分");
+    tr+=m[1];te+=e;to+=o;
+    $("#h"+i).textContent=" 已 "+e+" / 应 "+m[1];
+    rows+='<tr class="'+(o?"ow":"ok")+'"><td>'+m[0]+'</td><td>'+m[1]+'</td><td>'+e+'</td><td>'+o+'</td></tr>';
+    txt+=m[0]+"：应修"+m[1]+"，已取得"+e+"，尚欠"+o+(e>m[1]?"（超修"+(e-m[1])+"）":"")+"\n";
+  });
+  $("#rows").innerHTML=rows;
+  $("#tot").innerHTML='<tr><td>合计</td><td>'+tr+'</td><td>'+te+'</td><td>'+to+'</td></tr>';
+  $("#ms").innerHTML=miss.length?miss.map(function(x){return"<li>"+x+"</li>"}).join(""):"<li>无，学分已全部取得。</li>";
+  out=txt+"合计：应修"+tr+"，已取得"+te+"，尚欠"+to+"\n尚欠课程：\n"+(miss.length?miss.join("\n"):"无");
+}
+load();build();calc();
+document.addEventListener("change",function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.k){st.c[t.dataset.k]=t.checked?1:0}
+  else if(t.id=="g"){st.g=Math.max(0,Math.min(20,+t.value||0))}
+  else return;
+  save();calc();
+});
+document.addEventListener("click",function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.a!==undefined&&t.dataset.i){
+    var i=+t.dataset.i;
+    M[i][2].forEach(function(s,j){st.c[i+"-"+j]=+t.dataset.a});
+    save();build();calc();
+  }
+});
+$("#rs").onclick=function(){def();save();build();calc();$("#cm").textContent="已重置。"};
+$("#cp").onclick=function(){
+  try{navigator.clipboard.writeText(out).then(function(){$("#cm").textContent="已复制。"},function(){$("#cm").textContent="复制失败，请手动截图。"})}
+  catch(e){$("#cm").textContent="复制失败，请手动截图。"}
+};
+var SMP=null;
+try{claude.use("sample").then(function(s){SMP=s},function(){})}catch(e){}
+function tab(n){$("#imp").hidden=n!=2;$("#mods").hidden=n!=1;$("#t1").className=n==1?"":"g";$("#t2").className=n==2?"":"g"}
+$("#t1").onclick=function(){tab(1)};$("#t2").onclick=function(){tab(2)};tab(2);
+
+function nm(s){return s.replace(/[（）()\s]/g,"")}
+var IDX=[];M.forEach(function(m,i){if(m[2])m[2].forEach(function(s,j){IDX.push([nm(s.split("|")[0]),i+"-"+j])})});
+function K(n){for(var i=0;i<IDX.length;i++)if(IDX[i][0]==n)return IDX[i][1];return null}
+function nmOf(k){var a=k.split("-");return M[a[0]][2][a[1]].split("|")[0]}
+function mapName(c){
+  var m=c.match(/(篮球|足球|排球|羽毛球|乒乓球|游泳|网球|健美操|武术|瑜伽|体育)(\d)$/);
+  if(m)return "0-"+(6+ +m[2]);
+  if(/思想道德与法治$/.test(c))return "0-0";
+  if(/马克思主义基本原理$/.test(c))return "0-2";
+  if(/形势与政策[一二三四五六七八\d]?$/.test(c))return "0-5";
+  m=c.match(/大学(日语|法语)(\d)$/);
+  if(m)return m[2]=="1"?"4-0":K("第二外语"+m[2]);
+  var b=null;IDX.forEach(function(p){if(c.slice(-p[0].length)==p[0]&&(!b||p[0].length>b[0].length))b=p});
+  return b?b[1]:null
+}
+function parse(s){
+  s=s.replace(/\s+/g,"");
+  var re=/(必修|限选|任选|公选|实践)(\d+\.\d{2})(\d+\.\d{2})(\d+\.\d{2})/g,m,p=0,d={passed:[],gong:0,failed:[],unmatched:[],n:0};
+  while(m=re.exec(s)){
+    var c=s.slice(p,m.index).replace(/[（）()]/g,""),cr=+m[2],sc=+m[3];p=re.lastIndex;d.n++;
+    if(m[1]=="公选"){if(sc>=60)d.gong+=cr;else d.failed.push(c.slice(-8));continue}
+    var k=mapName(c);
+    if(sc<60){d.failed.push(k?nmOf(k):c.slice(-8));continue}
+    if(k)d.passed.push(k);else d.unmatched.push(c.slice(-10));
+  }
+  return d
+}
+
+var FL=[];
+function addf(l){[].slice.call(l).forEach(function(f){if(FL.length<4&&(!f.type||/^image\/|pdf$/.test(f.type)))FL.push(f)});$("#fl").textContent=FL.length?"已选 "+FL.length+" 个："+FL.map(function(f){return f.name||"粘贴的图片"}).join("、"):""}
+$("#ph").onchange=$("#ph2").onchange=function(){addf(this.files);this.value=""};
+$("#clr").onclick=function(){FL=[];$("#tx").value="";$("#fl").textContent="";$("#im").textContent=""};
+document.addEventListener("paste",function(e){if(e.clipboardData&&e.clipboardData.files.length)addf(e.clipboardData.files)});
+function ld(u){return new Promise(function(ok,no){var e=document.createElement("script");e.src=u;e.onload=ok;e.onerror=function(){no(new Error("load"))};document.head.appendChild(e)})}
+function rd(f){return new Promise(function(ok,no){var r=new FileReader();r.onerror=no;r.onload=function(){ok(r.result)};r.readAsArrayBuffer(f)})}
+async function pdfText(f){
+  var U="https://cdn.bootcdn.net/ajax/libs/pdf.js/3.11.174/pdf";
+  if(!window.pdfjsLib){await ld(U+".min.js");pdfjsLib.GlobalWorkerOptions.workerSrc=U+".worker.min.js"}
+  var d=await pdfjsLib.getDocument({data:new Uint8Array(await rd(f))}).promise,t="";
+  for(var p=1;p<=d.numPages;p++){
+    var c=await(await d.getPage(p)).getTextContent(),a=c.items.filter(function(i){return i.str.trim()}).sort(function(u,v){return v.transform[5]-u.transform[5]}),rows=[];
+    a.forEach(function(i){var r=rows[rows.length-1];if(r&&Math.abs(r.y-i.transform[5])<4)r.a.push(i);else rows.push({y:i.transform[5],a:[i]})});
+    rows.forEach(function(r){t+=r.a.sort(function(u,v){return u.transform[4]-v.transform[4]}).map(function(i){return i.str}).join("")+"\n"})
+  }
+  return t
+}
+async function ocrText(f,im){
+  if(!window.Tesseract)await ld("https://cdn.bootcdn.net/ajax/libs/tesseract.js/5.1.1/tesseract.min.js");
+  var r=await Tesseract.recognize(f,"chi_sim",{workerPath:"https://cdn.npmmirror.com/packages/tesseract.js/5.1.1/dist/worker.min.js",corePath:"https://cdn.npmmirror.com/packages/tesseract.js-core/5.1.1/",langPath:"https://cdn.jsdmirror.com/gh/tesseract-ocr/tessdata@4.0.0_fast",logger:function(m){if(m.status=="recognizing text")im.textContent="正在识别照片 "+Math.round(m.progress*100)+"%"}});
+  return r.data.text
+}
+$("#go").onclick=async function(){
+  var im=$("#im"),t=$("#tx").value.trim();
+  if(!FL.length&&!t){im.textContent="请先选择成绩单 PDF 或照片，或粘贴成绩单文字。";return}
+  try{
+    for(var i=0;i<FL.length;i++){
+      var f=FL[i];im.textContent="正在读取 "+(f.name||"图片")+"……首次使用要加载识别组件，请稍等。";
+      t+=/pdf/i.test(f.type||f.name)?await pdfText(f):await ocrText(f,im);
+    }
+    var d=parse(t);
+    if(!d.n){im.textContent="没有读到课程记录。扫描版 PDF 或不清晰的照片读不出来，请换清晰的图片，或用“自己勾选”。";return}
+    def();var n=0;
+    d.passed.forEach(function(k){if(!st.c[k])n++;st.c[k]=1});
+    st.g=Math.min(8,d.gong);
+    save();build();calc();
+    im.textContent="读到 "+d.n+" 条成绩，对应通过课程 "+n+" 门，通识选修 "+st.g+" 学分（超过 8 按 8 计）。"+(d.failed.length?" 未通过："+d.failed.join("、")+"。":"")+(d.unmatched.length?" 对不上培养方案："+d.unmatched.join("、")+"。":"")+" 请对照成绩单核对。";
+    window.scrollTo(0,0);
+  }catch(e){
+    im.textContent="识别失败（"+(e&&e.message=="load"?"识别组件加载失败，请检查网络":"读取出错")+"），请改用粘贴文字或“自己勾选”。";
+  }
+};
+</script></body></html>
